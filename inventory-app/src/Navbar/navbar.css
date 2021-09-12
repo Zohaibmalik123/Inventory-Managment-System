@@ -1,0 +1,21 @@
+.Header{
+    background-color: rgba(162, 182, 182, 0.877);
+    
+}
+
+.links{
+    padding-right: .5rem;
+    padding-left: .5rem;
+    color: rgba(0,0,0,.55);
+    text-decoration: none;
+    display: block;
+    padding: .5rem 1rem;
+}
+.links:hover{
+    color: black;
+}
+.logo{
+    font-weight: 700;
+    font-size: 30px;
+    padding: 12px ;
+}
