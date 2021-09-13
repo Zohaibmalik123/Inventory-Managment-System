@@ -1,40 +1,30 @@
-import React, { useState , useHistory } from 'react';
+import React, {  useState } from 'react';
 import "./login.css";
 import loginimage from "./Image/img.png"
 import { Link } from 'react-router-dom';
-// import axios from 'axios';
+import axios from 'axios';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
 
-function Login() {
-
-    // const history = useHistory();
+function Login(props) {
 
     const [email , setEmail] = useState("");
     const [password , setPassword] = useState("");
 
-    async function LoginPage() {
-        console.warn(email , password)
+    const LoginPage = (e) => {
+        e.preventDefault();
+        console.log(email , password)
         let item = { email , password};
-        let result = await fetch("http://localhost:8000/users/signin" , {
-            method: "POST",
-            headers:{
-                "Content-Type": "application/json"
-            },
-            body:JSON.stringify(item)
-        });
-
-        result = await result.json();
-        localStorage.setItem("user-info" ,JSON.stringify(result))
-        // history.push('/');
+        axios.post('/users/signin', item,{"Content-Type" : "application/json"})
+        .then(function (response) {   
+            console.log("response" , response)
+            localStorage.setItem("usertoken" ,JSON.stringify(response.data.token))
+            props.setIsLoggedIn(localStorage.usertoken);
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
 
     }
-
-    // useEffect(() => {
-    //     return () => {
-    //         LoginPage()
-    //     }
-    // }, [])
-
     
     return (
         <>
@@ -44,7 +34,7 @@ function Login() {
                     <h2 className="heading">Member Login</h2>
 
 
-                    <Form method="POST" >
+                    <Form method="POST" onSubmit={LoginPage} >
                         <Form.Group as={Row} className="mb-3 , lableform" controlId="formBasicEmail">
 
                             <Col sm="4">
@@ -60,7 +50,7 @@ function Login() {
                             <Link className="forget" to="#">Forgotten password</Link>
 
                         </Form.Group>
-                        <Button className="button" type="submit" onClick={LoginPage}>
+                        <Button className="button" type="submit">
                             Login
                         </Button>
                         <Button className="button" type="submit">
