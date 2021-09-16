@@ -24,6 +24,8 @@ function ProductsCreateEdit() {
                                 <Form.Control placeholder="1234 Main St" />
                                 <Form.Label> Brand Name</Form.Label>
                                 <Form.Control placeholder="1234 Main St" />
+                                <Form.Label>Category</Form.Label>
+                                <Form.Control placeholder="1234 Main St" />
                             </Form.Group>
                             
 

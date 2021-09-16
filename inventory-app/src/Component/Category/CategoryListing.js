@@ -1,6 +1,6 @@
 import React from 'react'
-import { Table, Container, Breadcrumb, Col } from "react-bootstrap"
-import { Link } from 'react-router-dom'
+import { Table, Form ,Container, Breadcrumb, Col } from "react-bootstrap"
+import { Link  } from 'react-router-dom'
  import "./category.css"; 
 
 function CategoryListing() {
@@ -17,7 +17,7 @@ function CategoryListing() {
                 <Table striped bordered hover>
                     <thead>
                         <tr>
-                            <th>#</th>
+                            <th>Id</th>
                             <th>Category Name</th>
                             <th>Category Status</th>
                             <th>Options</th>
@@ -28,7 +28,13 @@ function CategoryListing() {
                             <td>1</td>
                             <td>Mark</td>
                             <td>Otto</td>
-                            <td>@mdo</td>
+                            <td>
+                            <Form.Select defaultValue="Action" aria-label="Default select example">
+                                    <option value="1">Edit</option>
+                                    <option value="2">Remove</option>
+                                </Form.Select>
+
+                            </td>
                         </tr>
                     </tbody>
                 </Table>

@@ -4,6 +4,8 @@ import loginimage from "./Image/img.png"
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Container, Form, Button, Row, Col } from 'react-bootstrap';
+axios.defaults.baseURL='http://localhost:8000'
+
 
 function Login(props) {
 

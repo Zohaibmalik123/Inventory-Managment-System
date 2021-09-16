@@ -1,14 +1,12 @@
 import React from 'react'
 import {Container ,Nav , Navbar , NavDropdown} from 'react-bootstrap'
-import { Link ,useHistory } from 'react-router-dom'
-import Login from '../Login/login'
+import { Link } from 'react-router-dom'
 import "../Navbar/navbar.css"
 
-function NavBar() {
-    const history = useHistory()
-    function logout() {
+function NavBar(props) {
+    const logout = () => {
         localStorage.clear()
-        history.push(Login)
+        props.setIsLoggedIn(localStorage.usertoken);
     }
     return (
         <>
@@ -22,14 +20,14 @@ function NavBar() {
                         <Nav className="me-auto">
                         </Nav>
                         <Nav>
-                            <Link className="links" to="/dashboard">Dashboard</Link>
+                            <Link className="links" to="/">Dashboard</Link>
                             <Link className="links" to="/brands">Brands</Link>
                             <Link className="links" to="/category">Category</Link>
                             <Link className="links" to="/product">Products</Link>
                             <Link className="links" to="/orders">Orders</Link>
                             <NavDropdown title="Setting" id="basic-nav-dropdown">
                                 <NavDropdown.Item href="/adduser">Add user</NavDropdown.Item>
-                                <NavDropdown.Item onClick={logout} href="/Logout">Logout</NavDropdown.Item>
+                                <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
                                 <NavDropdown.Item href="reprt">Report</NavDropdown.Item>
                             </NavDropdown>
                         </Nav>

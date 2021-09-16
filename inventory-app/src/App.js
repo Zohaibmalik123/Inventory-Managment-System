@@ -4,7 +4,7 @@ import './App.css';
 import Login from './Login/login';
 import NavBar from './Navbar/Navbar';
 import  {Switch , Route}  from 'react-router-dom'
-import Dashboard from './Component/Dashboard';
+import DashBoard from './Component/Dashboard/Dashboardlisting';
 import BrandListing from './Component/Brands/BrandListing';
 import CreateEditBrand from './Component/Brands/CreateEditBrand';
 import CategoryListing from './Component/Category/CategoryListing';
@@ -19,13 +19,13 @@ function App() {
   return (
     <Fragment >
       
-      {!isLoggedIn && <Login  setIsLoggedIn={setIsLoggedIn}/>}
+      {!isLoggedIn && <Login setIsLoggedIn={setIsLoggedIn}/>}
       {isLoggedIn && (
         <>
-          <NavBar/>
+          <NavBar setIsLoggedIn={setIsLoggedIn}/>
           
           <Switch>
-            <Route exact path = "/dashboard"  component={Dashboard} />
+            <Route exact path = "/"  component={DashBoard} />
             <Route exact path = "/brands"  component={BrandListing} />
             <Route exact path = "/brands/create"  component={CreateEditBrand} />
             <Route exact path = "/category"  component={CategoryListing} />

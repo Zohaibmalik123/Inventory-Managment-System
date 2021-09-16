@@ -8,7 +8,8 @@ function CreateOrderList() {
             <Container>
                 <Breadcrumb className="mt-3 breadcrumb">
                     <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
-                    <Breadcrumb.Item active>Orders</Breadcrumb.Item>
+                    <Breadcrumb.Item href="#">Orders</Breadcrumb.Item>
+                    <Breadcrumb.Item active>Create Order</Breadcrumb.Item>
                 </Breadcrumb>
 
                 <Row className="justify-content-md-center">
