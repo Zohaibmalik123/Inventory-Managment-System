@@ -1,16 +1,16 @@
 const express = require('express')
 const Category = require('../models/category')
 const router = new express.Router()
+const auth = require('../middleware/authuser')
 
 
-router.post('/create/category' , async (req , res)=>{
-    const category = new Category(req.body)
+router.post('/create/category', auth ,async (req , res)=>{
+    const category = new  Category(req.body)
     try{
         await category.save()
-        const token = await category.generateAuthToken()
-        res.status(201).send({category , token})
+        res.status(201).send(category)
     } catch (e) {
-        res.status(401).send(e)
+        res.status(400).send(e)
     }
 
 })

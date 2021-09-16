@@ -1,16 +1,17 @@
 const express = require('express')
 const Brand = require('../models/brand')
 const router = new express.Router()
+const auth = require('../middleware/authuser')
 
 
 
-router.post('/create/brand' , async (req , res)=>{
+router.post('/create/brand', auth , async (req , res)=>{
     const brand = new  Brand(req.body)
     try{
         await brand.save()
         res.status(201).send(brand)
     } catch (e) {
-        res.status(401).send(e)
+        res.status(400).send(e)
     }
 
 })
