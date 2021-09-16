@@ -19,7 +19,7 @@ function Login(props) {
         axios.post('/users/signin', item,{"Content-Type" : "application/json"})
         .then(function (response) {   
             console.log("response" , response)
-            localStorage.setItem("usertoken" ,JSON.stringify(response.data.token))
+            localStorage.setItem("usertoken" ,response.data.token)
             props.setIsLoggedIn(localStorage.usertoken);
         })
         .catch(function (error) {

@@ -5,8 +5,7 @@ import "../Navbar/navbar.css"
 
 function NavBar(props) {
     const logout = () => {
-        localStorage.clear()
-        props.setIsLoggedIn(localStorage.usertoken);
+        props.logout();
     }
     return (
         <>
