@@ -28,7 +28,12 @@ function CategoryEdit(props) {
                 setShowAlertTitle("Success")
                 setShowAlert(true)
                 setCategoryName("")
-                setCategoryStatus("")
+                if( categoryStatus===categoryStatus){
+                    setCategoryStatus(categoryStatus)
+                }else{
+                    setCategoryStatus(categoryStatus)
+                }
+
             })
             .catch( (error) => {
                 if(error.response?.status == 401){
@@ -68,9 +73,11 @@ function CategoryEdit(props) {
 
                             <Form.Group as={Col}  controlId="formGridState">
                                 <Form.Label>Status</Form.Label>
-                                <Form.Select  defaultValue="Choose...">
-                                    <option value={categoryStatus} onChange={(e)=>setCategoryStatus(e.target.value)}>Active</option>
+                                <Form.Select  value={categoryStatus} onChange={(e)=>setCategoryStatus(e.target.value)}  defaultValue="Choose...">
+                                        <option >Available</option>
+                                        <option >Active</option>
                                     <option>Inactive</option>
+
                                 </Form.Select>
                             </Form.Group>
 

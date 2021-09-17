@@ -12,7 +12,7 @@ function CategoryListing() {
                     <Breadcrumb.Item href="#">Home</Breadcrumb.Item>
                     <Breadcrumb.Item active>Category</Breadcrumb.Item>
                 </Breadcrumb>
-                <Col><Link className="btn btn-primary categories mb-2" to="/createcategory">Add Category</Link></Col>
+                <Col><Link className="btn btn-primary categories mb-2" to="/category/add">Add Category</Link></Col>
 
                 <Table striped bordered hover>
                     <thead>

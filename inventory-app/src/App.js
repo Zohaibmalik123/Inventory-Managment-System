@@ -34,11 +34,11 @@ function App() {
             <Route exact path = "/brands"  component={BrandListing} />
             <Route exact path = "/brands/create"  component={() => <CreateEditBrand logout={logout}/>}/>
             <Route exact path = "/category"  component={CategoryListing} />
-            <Route exact path = "/createcategory"  component={() => <CategoryEdit logout={logout}/>}/>
+            <Route exact path = "/category/add"  component={() => <CategoryEdit logout={logout}/>}/>
             <Route exact path = "/product"  component={ProductListing} />
-            <Route exact path = "/createproducts"  component={ProductsCreateEdit} />
+            <Route exact path = "/createproducts"  component={() => <ProductsCreateEdit logout={logout}/>} />
             <Route exact path = "/orders"  component={Orderslist} />
-            <Route exact path = "/createorders"  component={CreateOrderList} />
+            <Route exact path = "/createorders"  component={() => <CreateOrderList logout={logout}/>} />
           </Switch>
         </>
       )}
