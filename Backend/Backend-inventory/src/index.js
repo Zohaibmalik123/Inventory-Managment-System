@@ -4,6 +4,8 @@ require('./db/mongoose')
 const userRouter = require('./Router/user')
 const brandRouter = require('./Router/brand')
 const categoryRouter = require('./Router/category')
+const productRouter = require('./Router/product')
+const orderRouter = require('./Router/order')
 
 const app = express()
 
@@ -17,6 +19,8 @@ app.use(cors({
 app.use(userRouter)
 app.use(brandRouter)
 app.use(categoryRouter)
+app.use(productRouter)
+app.use(orderRouter)
 
 
 
