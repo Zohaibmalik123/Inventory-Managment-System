@@ -15,6 +15,14 @@ router.post('/create/brand', auth , async (req , res)=>{
     }
 
 })
+router.get('/get-brands'  , async (req , res)=>{
+    try{
+        const brand = await Brand.find({})
+        res.send(brand)
+    } catch (e) {
+        res.status(500).send(e)
+    }
+})
 // router.patch('/brand/update' , async (req , res)=>{
 //     const updates = Object.keys(req.body)
 //     const allowedUpdates=['brandName']

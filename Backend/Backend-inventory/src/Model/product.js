@@ -9,11 +9,6 @@ const userSchema = mongoose.Schema({
         required:true,
         trim:true
     },
-    categoryName :{
-        type : String,
-        // required:true,
-        trim:true
-    },
     quantity :{
         type:String,
         required:true
@@ -23,8 +18,15 @@ const userSchema = mongoose.Schema({
         required:true,
         trim: true
     },
-    brandName:{
-        type:String,
+    category :{
+        type : mongoose.Schema.Types.ObjectId,
+        ref:'Category',
+        // required:true,
+        trim:true
+    },
+    brand:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'Brand',
         required: true
     },
     productStatus:{

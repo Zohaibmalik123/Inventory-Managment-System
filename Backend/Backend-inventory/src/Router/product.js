@@ -2,22 +2,46 @@ const express = require('express')
 const Product = require('../Model/product')
 const router = new express.Router()
 const auth = require('../middleware/authuser')
+const Category = require("../Model/category");
+const Brand = require("../Model/brand");
 
 
 
 router.post('/create/product'  , auth, async (req , res)=>{
-    const product = new Product(req.body)
-    console.log(product)
+    // const product = new Product(req.body)
+    console.log(req.body)
     try{
+
+        const brand = await Brand.findById(req.body.brandId)
+        const category = await Category.findById(req.body.categoryId)
+        // console.log(brand)
+        // console.log(category)
+        product = new Product()
+        product.brand = brand
+        product.category = category
+        product.productName = req.body.productName
+        product.quantity = req.body.quantity
+        product.rate = req.body.rate
+        product.productStatus = req.body.productStatus
+
         await product.save()
-        console.log(product)
+        // console.log(product)
         res.status(201).send(product)
 
     } catch (e) {
-        console.log(e)
+        // console.log(e)
         res.status(400).send(e)
     }
 
+})
+router.get('/get-products'  , async (req , res)=>{
+    try{
+        const product = await Product.find({}).populate('category').populate('brand')
+        // console.log(product)
+        res.send(product)
+    } catch (e) {
+        res.status(500).send(e)
+    }
 })
 // router.patch('/update/product' , async (req , res)=>{
 //     const updates = Object.keys(req.body)

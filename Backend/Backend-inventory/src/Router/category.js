@@ -2,6 +2,7 @@ const express = require('express')
 const Category = require('../Model/category')
 const router = new express.Router()
 const auth = require('../middleware/authuser')
+const Brand = require("../Model/brand");
 
 
 router.post('/create/category', auth ,async (req , res)=>{
@@ -13,6 +14,14 @@ router.post('/create/category', auth ,async (req , res)=>{
         res.status(400).send(e)
     }
 
+})
+router.get('/get-category'  , async (req , res)=>{
+    try{
+        const category = await Category.find({})
+        res.send(category)
+    } catch (e) {
+        res.status(500).send(e)
+    }
 })
 // router.patch('/update/category' , auth , async (req , res)=>{
 //     const updates = Object.keys(req.body)
