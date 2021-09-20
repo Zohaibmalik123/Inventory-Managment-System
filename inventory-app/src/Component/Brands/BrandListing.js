@@ -1,29 +1,24 @@
-// import Button from '@restart/ui/esm/Button'
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { Table, Container, Breadcrumb, Col , Form } from "react-bootstrap"
 import { Link } from 'react-router-dom'
-// import TableRow from '@material-ui/core/TableRow';
 import "./Brand.css";
+import axios from "axios";
+axios.defaults.baseURL='http://localhost:8000'
 
 // var tableRowIndex = 0;
 function BrandListing() {
- 
-// const [tableBrand , setTableBrand] = useState([{
-//     Id :'0',
-//     Brand_Name:"",
-//     Brand_Status:""
-// }]);
 
-// const handleChange = data  => {
-//     tableBrand[data.Id] = data
-// }
-
-// const addNewBrand= () =>{
-//     tableRowIndex = parseFloat(tableRowIndex) +1
-//     var updatedBrand = [...tableBrand]
-//     updatedBrand[tableRowIndex] = {Id: tableRowIndex , Brand_Name : "" , Brand_Status :""}
-//     setTableBrand(updatedBrand)
-// }
+    const [brands, setBrands] = useState([]);
+    useEffect(() => {
+        axios.get('/get-brands')
+        .then(function (response) {
+            setBrands(response.data);
+            console.log(response.data)
+        })
+        .catch(function (error) {
+            console.log(error);
+        })
+    }, [])
 
 
     return (
@@ -46,31 +41,21 @@ function BrandListing() {
                     </thead>
                     <tbody>
 
-                    {/* {
-                  tableBrand.forEach((row, index) => {
-                     if(row)
-                     return(
-                        <TableRow key={index} row={row} handleDataChange={handleChange} ></TableRow>
-                     )
-                  })
-               } */}
+                     { brands.map((row, index) => {
+                            return(
+                                <tr>
+                                <td>{index + 1}</td>
+                                <td>{row.brandName}</td>
+                                <td>{row.brandStatus}</td>
+                                <td>
+                                    <Link to={`/brands/edit/${row._id}`}>
+                                        Edit
+                                    </Link>
+                                </td>
+                            </tr>
+                            );
+                     })}
 
-
-
-                        <tr>
-                            <td>1</td>
-                            <td>Mark</td>
-                            <td> <Form.Select defaultValue="Action" aria-label="Default select example">
-                                    <option value="1">Active</option>
-                                    <option value="2">InActive</option>
-                                </Form.Select></td>
-                            <td>
-                                <Form.Select defaultValue="Action" aria-label="Default select example">
-                                    <option value="1">Edit</option>
-                                    <option value="2">Remove</option>
-                                </Form.Select>
-                            </td>
-                        </tr>
                     </tbody>
                 </Table>
             </Container>

@@ -1,27 +1,46 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Form , Col , Row , Button , Container , Breadcrumb} from 'react-bootstrap'
 import axios from "axios";
 import SweetAlert from 'sweetalert-react';
 import 'sweetalert/dist/sweetalert.css';
+import {Link} from "react-router-dom";
 axios.defaults.baseURL='http://localhost:8000'
 
 function ProductsCreateEdit(props) {
 
 
-    const [brandName , setBrandName] = useState("")
+    const [brandId , setBrandId] = useState("")
     const [productName , setProductName] = useState("")
-    const [categoryName , setCategoryName] = useState("")
+    const [categoryId , setCategoryId] = useState("")
     const [quantity , setQuantity] = useState("")
     const [rate , setRate] = useState("")
     const [productStatus , setProductStatus] = useState("")
     const [showAlert , setShowAlert] = useState(false)
     const [showAlertTitle , setShowAlertTitle] = useState("")
     const [showAlertText , setShowAlertText] = useState("")
+    const [brands, setBrands] = useState([]);
+    const [category, setCategory] = useState([]);
+    useEffect(() => {
+        axios.get('/get-brands')
+            .then(function (response) {
+                setBrands(response.data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+        axios.get('/get-category')
+            .then(function (response) {
+                setCategory(response.data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+    }, [])
 
 
     const createProduct = (e) =>{
         e.preventDefault();
-        let item = { brandName , productName , categoryName , quantity , rate , productStatus };
+        let item = { brandId , productName , categoryId , quantity , rate , productStatus };
         axios.post('/create/product', item,
             { headers : {"Content-Type" : "application/json",
                     Authorization : `Bearer ${localStorage.usertoken}`
@@ -30,9 +49,9 @@ function ProductsCreateEdit(props) {
                 setShowAlertText("Product is successfully created")
                 setShowAlertTitle("Success")
                 setShowAlert(true)
-                setBrandName("")
+                setBrandId("")
                 setProductName("")
-                setCategoryName("")
+                setCategoryId("")
                 setQuantity("")
                 setRate("")
                 if( productStatus===productStatus){
@@ -77,10 +96,24 @@ function ProductsCreateEdit(props) {
                                 <Form.Control type="number" value={quantity} onChange={(e)=>setQuantity(e.target.value)} placeholder="" />
                                 <Form.Label> Rate</Form.Label>
                                 <Form.Control type="number" value={rate} onChange={(e)=>setRate(e.target.value)} placeholder="" />
-                                <Form.Label> Brand Name</Form.Label>
-                                <Form.Control type="text" value={brandName} onChange={(e)=>setBrandName(e.target.value)} placeholder="" />
-                                <Form.Label>Category</Form.Label>
-                                <Form.Control type="text" value={categoryName} onChange={(e)=>setCategoryName(e.target.value)} placeholder="" />
+                                <Form.Label> Brand_Name</Form.Label>
+                                <Form.Select   value={brandId} onChange={(e)=>setBrandId(e.target.value)} defaultValue="Choose...">
+                                    <option value="">Select Brand</option>
+                                    { brands.map((row, index) => {
+                                        return(
+                                            <option value={row._id}>{row.brandName}</option>
+                                        );
+                                    })}
+                                </Form.Select>
+                                <Form.Label>Category_Name</Form.Label>
+                                <Form.Select   value={categoryId} onChange={(e)=>setCategoryId(e.target.value)} defaultValue="Choose...">
+                                    <option value="">Select Category</option>
+                                    { category.map((row, index) => {
+                                        return(
+                                            <option value={row._id}>{row.categoryName}</option>
+                                        );
+                                    })}
+                                </Form.Select>
                             </Form.Group>
                             
 

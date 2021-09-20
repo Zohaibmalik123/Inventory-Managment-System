@@ -1,9 +1,22 @@
-import React from 'react'
+import React, {useEffect, useState} from 'react'
 import { Table, Form ,Container, Breadcrumb, Col } from "react-bootstrap"
 import { Link  } from 'react-router-dom'
- import "./category.css"; 
+ import "./category.css";
+import axios from "axios";
 
 function CategoryListing() {
+
+    const [category, setCategory] = useState([]);
+    useEffect(() => {
+        axios.get('/get-category')
+            .then(function (response) {
+                setCategory(response.data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+    }, [])
+
     return (
         <>
 
@@ -24,18 +37,22 @@ function CategoryListing() {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>
-                            <Form.Select defaultValue="Action" aria-label="Default select example">
-                                    <option value="1">Edit</option>
-                                    <option value="2">Remove</option>
-                                </Form.Select>
 
-                            </td>
-                        </tr>
+
+                    { category.map((row, index) => {
+                        return(
+                            <tr>
+                                <td>{index + 1}</td>
+                                <td>{row.categoryName}</td>
+                                <td>{row.categoryStatus}</td>
+                                <td>
+                                    <Link to={`/category/edit/${row._id}`}>
+                                        Edit
+                                    </Link>
+                                </td>
+                            </tr>
+                        );
+                    })}
                     </tbody>
                 </Table>
             </Container>

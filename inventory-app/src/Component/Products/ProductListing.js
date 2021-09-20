@@ -1,7 +1,20 @@
-import React from 'react'
-import { Table, Container, Breadcrumb, Col } from "react-bootstrap"
+import React, {useEffect, useState} from 'react'
+import {Table, Container, Breadcrumb, Col, Form} from "react-bootstrap"
 import {Link} from 'react-router-dom'
+import axios from "axios";
 function ProductListing() {
+
+    const [product, setProducts] = useState([]);
+    useEffect(() => {
+        axios.get('/get-products')
+            .then(function (response) {
+                setProducts(response.data);
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+    }, [])
+
     return (
         <>
 
@@ -16,22 +29,43 @@ function ProductListing() {
                     <thead>
                         <tr>
                             <th>#</th>
-                            <th>Name</th>
+                            <th>Product_Name</th>
                             <th>Quantity</th>
                             <th>Rate</th>
-                            <th>Brand Name</th>
+                            <th>Brand_Name</th>
+                            <th>Category_Name</th>
+                            <th>Status</th>
                             <th>Options</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                            <td>@ds</td>
-                            <td>kainat</td>
-                            <td>available</td>
-                        </tr>
+
+                    { product.map((row, index) => {
+                        return(
+                            <tr>
+                                <td>{index + 1}</td>
+                                <td>{row.productName}</td>
+                                <td>{row.quantity}</td>
+                                <td>{row.rate}</td>
+                                <td>{row.brand.brandName}</td>
+                                <td>{row.category.categoryName}</td>
+                                <td>{row.productStatus}</td>
+                                <td>
+                                    <Link to={`/product/edit/${row._id}`}>
+                                        Edit
+                                    </Link>
+                                </td>
+                            </tr>
+                        );
+                    })}
+                        {/*<tr>*/}
+                        {/*    <td>1</td>*/}
+                        {/*    <td>Mark</td>*/}
+                        {/*    <td>Otto</td>*/}
+                        {/*    <td>@ds</td>*/}
+                        {/*    <td>brand</td>*/}
+                        {/*    <td>available</td>*/}
+                        {/*</tr>*/}
                     </tbody>
                 </Table>
             </Container>
