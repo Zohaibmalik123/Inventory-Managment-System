@@ -1,19 +1,18 @@
 import React, {useEffect, useState} from 'react'
-import { Table, Container, Breadcrumb, Col , Form } from "react-bootstrap"
-import { Link } from 'react-router-dom'
+import { Table, Button,Container, Breadcrumb, Col , Form } from "react-bootstrap"
+import {Link} from 'react-router-dom'
 import "./Brand.css";
 import axios from "axios";
 axios.defaults.baseURL='http://localhost:8000'
 
-// var tableRowIndex = 0;
-function BrandListing() {
 
+function BrandListing(props) {
     const [brands, setBrands] = useState([]);
     useEffect(() => {
         axios.get('/get-brands')
         .then(function (response) {
             setBrands(response.data);
-            console.log(response.data)
+            // console.log(response.data)
         })
         .catch(function (error) {
             console.log(error);
@@ -29,6 +28,7 @@ function BrandListing() {
                     <Breadcrumb.Item active>Brand</Breadcrumb.Item>
                 </Breadcrumb>
                 <Col><Link className="btn btn-primary brandAddButton mb-2" to="/brands/create">Add Brands</Link></Col>
+
 
                 <Table striped bordered hover>
                     <thead>
@@ -48,9 +48,7 @@ function BrandListing() {
                                 <td>{row.brandName}</td>
                                 <td>{row.brandStatus}</td>
                                 <td>
-                                    <Link to={`/brands/edit/${row._id}`}>
-                                        Edit
-                                    </Link>
+                                    <Link className="btn Edit mb-2" to={`/brands/edit/${row._id}`} >Edit</Link>
                                 </td>
                             </tr>
                             );

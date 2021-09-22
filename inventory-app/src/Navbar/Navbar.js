@@ -25,9 +25,7 @@ function NavBar(props) {
                             <Link className="links" to="/product">Products</Link>
                             <Link className="links" to="/orders">Orders</Link>
                             <NavDropdown title="Setting" id="basic-nav-dropdown">
-                                {/*<NavDropdown.Item href="/adduser">Add user</NavDropdown.Item>*/}
                                 <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
-                                <NavDropdown.Item href="reprt">Report</NavDropdown.Item>
                             </NavDropdown>
                         </Nav>
                     </Navbar.Collapse>

@@ -47,7 +47,8 @@ function ProductListing() {
                                 <td>{row.productName}</td>
                                 <td>{row.quantity}</td>
                                 <td>{row.rate}</td>
-                                <td>{row.brand.brandName}</td>
+                                <td>{row.brand?.brandName}</td>
+                                {/*<td></td>*/}
                                 <td>{row.category.categoryName}</td>
                                 <td>{row.productStatus}</td>
                                 <td>
@@ -58,14 +59,7 @@ function ProductListing() {
                             </tr>
                         );
                     })}
-                        {/*<tr>*/}
-                        {/*    <td>1</td>*/}
-                        {/*    <td>Mark</td>*/}
-                        {/*    <td>Otto</td>*/}
-                        {/*    <td>@ds</td>*/}
-                        {/*    <td>brand</td>*/}
-                        {/*    <td>available</td>*/}
-                        {/*</tr>*/}
+
                     </tbody>
                 </Table>
             </Container>

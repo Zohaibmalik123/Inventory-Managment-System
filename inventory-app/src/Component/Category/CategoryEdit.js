@@ -30,8 +30,6 @@ function CategoryEdit(props) {
                 setCategoryName("")
                 if( categoryStatus===categoryStatus){
                     setCategoryStatus(categoryStatus)
-                }else{
-                    setCategoryStatus(categoryStatus)
                 }
 
             })

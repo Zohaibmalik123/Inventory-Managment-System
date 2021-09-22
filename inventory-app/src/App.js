@@ -28,11 +28,12 @@ function App() {
       {isLoggedIn && (
         <>
           <NavBar logout={logout}/>
-          
+          s
           <Switch>
             <Route exact path = "/"  component={DashBoard} />
             <Route exact path = "/brands"  component={BrandListing} />
             <Route exact path = "/brands/create"  component={() => <CreateEditBrand logout={logout}/>}/>
+            <Route path = "/brands/edit/:id"  component={() => <CreateEditBrand logout={logout}/>}/>
             <Route exact path = "/category"  component={CategoryListing} />
             <Route exact path = "/category/add"  component={() => <CategoryEdit logout={logout}/>}/>
             <Route exact path = "/product"  component={ProductListing} />

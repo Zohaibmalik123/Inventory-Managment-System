@@ -56,8 +56,6 @@ function ProductsCreateEdit(props) {
                 setRate("")
                 if( productStatus===productStatus){
                     setProductStatus(productStatus)
-                }else{
-                    setProductStatus(productStatus)
                 }
             })
             .catch( (error) => {
