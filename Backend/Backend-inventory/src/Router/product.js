@@ -9,7 +9,7 @@ const Brand = require("../Model/brand");
 
 router.post('/create/product'  , auth, async (req , res)=>{
     // const product = new Product(req.body)
-    console.log(req.body)
+    // console.log(req.body)
     try{
 
         const brand = await Brand.findById(req.body.brandId)
