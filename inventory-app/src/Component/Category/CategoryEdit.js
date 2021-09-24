@@ -1,12 +1,18 @@
 
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {Form ,Container, Col , Row ,Button , Breadcrumb} from 'react-bootstrap'
 import axios from "axios";
 import 'sweetalert/dist/sweetalert.css';
 import SweetAlert from "sweetalert-react";
+import {useParams , useHistory} from "react-router-dom";
 axios.defaults.baseURL='http://localhost:8000'
 
 function CategoryEdit(props) {
+    const history = useHistory()
+    const [categoryData , setCategoryData] = useState({
+        categoryName : null,
+        categoryStatus:null
+    })
 
     const [categoryName , setCategoryName] = useState("")
     const [categoryStatus , setCategoryStatus] = useState("")
@@ -14,6 +20,49 @@ function CategoryEdit(props) {
     const [showAlertTitle , setShowAlertTitle] = useState("")
     const [showAlertText , setShowAlertText] = useState("")
 
+    const {id} = useParams()
+    useEffect(() => {
+        axios.get(`/get-category/${id}`)
+            .then(function (response) {
+                console.log(response.data)
+                if (!categoryData.categoryName && !categoryData.categoryStatus) {
+                    setCategoryData({categoryName: response.data.categoryName, categoryStatus: response.data.categoryStatus});
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+    },[])
+
+    const CategoryUpdate = (e)=>{
+        const {value} = e.target
+        setCategoryData({...categoryData, categoryName: value})
+    }
+    const UpdateCategoryStatus = (e)=>{
+        const {value} = e.target
+        setCategoryData({...categoryData, categoryStatus: value})
+    }
+
+    const UpdateCategory =(e)=>{
+        e.preventDefault()
+        if(categoryData.categoryName && categoryData.categoryStatus){
+            axios.patch(`/category/update/${id}`, categoryData,
+                {
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                .then(function (response) {
+                    setCategoryData(response.data)
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+            history.push("/category")
+        }else{
+            console.log("field is empty")
+        }
+    }
 
     const EnterCategory = (e) =>{
         e.preventDefault();
@@ -27,14 +76,14 @@ function CategoryEdit(props) {
                 setShowAlertText("Category is successfully created")
                 setShowAlertTitle("Success")
                 setShowAlert(true)
-                setCategoryName("")
+                categoryData(categoryName)
                 if( categoryStatus===categoryStatus){
                     setCategoryStatus(categoryStatus)
                 }
 
             })
             .catch( (error) => {
-                if(error.response?.status == 401){
+                if(error.response?.status === 401){
                     props.logout();
                 }else {
                     setShowAlertText("Failed to create Category.")
@@ -42,6 +91,10 @@ function CategoryEdit(props) {
                     setShowAlert(true)
                 }
             })
+
+
+
+
     }
     return (
         <>
@@ -65,14 +118,14 @@ function CategoryEdit(props) {
 
                             <Form.Group className="mb-3" controlId="formGridAddress1">
                                 <Form.Label>Category Name</Form.Label>
-                                <Form.Control type="text" value={categoryName} onChange={(e)=>setCategoryName(e.target.value)} placeholder="" />
+                                <Form.Control type="text" value={categoryData.categoryName} onChange={CategoryUpdate} placeholder="" />
                             </Form.Group>
 
 
                             <Form.Group as={Col}  controlId="formGridState">
                                 <Form.Label>Status</Form.Label>
-                                <Form.Select  value={categoryStatus} onChange={(e)=>setCategoryStatus(e.target.value)}  defaultValue="Choose...">
-                                        <option >Available</option>
+                                <Form.Select  value={categoryData.categoryStatus} onChange={UpdateCategoryStatus}  defaultValue="Choose...">
+                                        <option >Action</option>
                                         <option >Active</option>
                                     <option>Inactive</option>
 
@@ -81,7 +134,7 @@ function CategoryEdit(props) {
 
                             <Row className="justify-content-md-center">
                                 <Col>
-                                    <Button variant="primary" type="submit" className="btn btn-primary mt-3 m-auto w-100">
+                                    <Button variant="primary" onClick={UpdateCategory} type="submit" className="btn btn-primary mt-3 m-auto w-100">
                                         Submit
                                     </Button>
                                 </Col>

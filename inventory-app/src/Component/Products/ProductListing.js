@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import {Table, Container, Breadcrumb, Col, Form} from "react-bootstrap"
+import {Table, Container, Breadcrumb, Col} from "react-bootstrap"
 import {Link} from 'react-router-dom'
 import axios from "axios";
 function ProductListing() {

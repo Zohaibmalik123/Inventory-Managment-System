@@ -3,7 +3,7 @@ import './bootstrap.min.css';
 import './App.css';
 import Login from './Login/login';
 import NavBar from './Navbar/Navbar';
-import  {Switch , Route}  from 'react-router-dom'
+import {Switch, Route, Router} from 'react-router-dom'
 import DashBoard from './Component/Dashboard/Dashboardlisting';
 import BrandListing from './Component/Brands/BrandListing';
 import CreateEditBrand from './Component/Brands/CreateEditBrand';
@@ -36,6 +36,7 @@ function App() {
             <Route path = "/brands/edit/:id"  component={() => <CreateEditBrand logout={logout}/>}/>
             <Route exact path = "/category"  component={CategoryListing} />
             <Route exact path = "/category/add"  component={() => <CategoryEdit logout={logout}/>}/>
+            <Route path = "/category/edit/:id" component={CategoryEdit}/>
             <Route exact path = "/product"  component={ProductListing} />
             <Route exact path = "/createproducts"  component={() => <ProductsCreateEdit logout={logout}/>} />
             <Route exact path = "/orders"  component={Orderslist} />

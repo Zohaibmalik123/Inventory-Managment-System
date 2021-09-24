@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { Table, Button,Container, Breadcrumb, Col , Form } from "react-bootstrap"
+import { Table,Container, Breadcrumb, Col, Button} from "react-bootstrap"
 import {Link} from 'react-router-dom'
 import "./Brand.css";
 import axios from "axios";
@@ -48,7 +48,7 @@ function BrandListing(props) {
                                 <td>{row.brandName}</td>
                                 <td>{row.brandStatus}</td>
                                 <td>
-                                    <Link className="btn Edit mb-2" to={`/brands/edit/${row._id}`} >Edit</Link>
+                                    <Link className="btn Edit mb-2" to={`/brands/edit/${row._id}`} > Edit </Link>
                                 </td>
                             </tr>
                             );

@@ -3,7 +3,6 @@ import {Form , Col , Row , Button , Container , Breadcrumb} from 'react-bootstra
 import axios from "axios";
 import SweetAlert from 'sweetalert-react';
 import 'sweetalert/dist/sweetalert.css';
-import {Link} from "react-router-dom";
 axios.defaults.baseURL='http://localhost:8000'
 
 function ProductsCreateEdit(props) {
@@ -59,7 +58,7 @@ function ProductsCreateEdit(props) {
                 }
             })
             .catch( (error) => {
-                if(error.response?.status == 401){
+                if(error.response?.status === 401){
                     props.logout();
                 }else {
                     setShowAlertText("Failed to product Brand.")

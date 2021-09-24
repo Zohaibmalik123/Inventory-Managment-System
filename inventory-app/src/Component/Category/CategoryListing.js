@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { Table, Form ,Container, Breadcrumb, Col } from "react-bootstrap"
+import { Table ,Container, Breadcrumb, Col } from "react-bootstrap"
 import { Link  } from 'react-router-dom'
  import "./category.css";
 import axios from "axios";
@@ -46,9 +46,7 @@ function CategoryListing() {
                                 <td>{row.categoryName}</td>
                                 <td>{row.categoryStatus}</td>
                                 <td>
-                                    <Link to={`/category/edit/${row._id}`}>
-                                        Edit
-                                    </Link>
+                                    <Link className="btn Edit mb-2" to={`/category/edit/${row._id}`}>Edit</Link>
                                 </td>
                             </tr>
                         );

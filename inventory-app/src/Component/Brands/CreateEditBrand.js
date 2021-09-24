@@ -1,92 +1,103 @@
 import Button from '@restart/ui/esm/Button'
-import React, {useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
+import  {useHistory} from "react-router-dom";
 import axios from 'axios';
 import { Form, Container, Col, Row, Breadcrumb } from "react-bootstrap"
 import SweetAlert from 'sweetalert-react';
 import 'sweetalert/dist/sweetalert.css';
-// import queryString from "querystring";
 import {useParams} from "react-router-dom";
 axios.defaults.baseURL='http://localhost:8000'
 
 function CreateEditBrand(props) {
+    const history = useHistory()
     const [brandsData, setBrandsData] = useState({
-        brandName:null,
-        brandStatus:null,
+        brandName: null,
+        brandStatus: null,
     });
-    /**
-     * setBrandsData({
-     *     setBrandName: name,
-     *     setBrandStatus: status
-     * });
-     * setBrandsData({
-     *     setBrandName: name,
-     * });
-     * */
-    const [brandName , setBrandName] = useState("")
-    const [brandStatus , setBrandStatus] = useState("")
-    const [showAlert , setShowAlert] = useState(false)
-    const [showAlertTitle , setShowAlertTitle] = useState("")
-    const [showAlertText , setShowAlertText] = useState("")
+
+    const [brandName] = useState("")
+    const [brandStatus] = useState("")
+    const [showAlert, setShowAlert] = useState(false)
+    const [showAlertTitle, setShowAlertTitle] = useState("")
+    const [showAlertText, setShowAlertText] = useState("")
 
     const {id} = useParams();
 
-        useEffect(() => {
-            // const url = window.location.href;
-            // const urlTokens = url.split("/");
-            // const brandId = urlTokens[urlTokens.length-1];
+    useEffect(() => {
+        axios.get(`/get-brand/${id}`)
+            .then(function (response) {
+                console.log(response.data)
+                if (!brandsData.brandName && !brandsData.brandStatus) {
+                    setBrandsData({brandName: response.data.brandName, brandStatus: response.data.brandStatus});
+                }
+            })
+            .catch(function (error) {
+                console.log(error);
+            })
+    },[])
 
-            axios.get(`/get-brand/${id}`)
-                .then(function (response) {
-                    console.log(response.data)
-                    // setBrands(response.data)
-                    // console.log(setBrands)
 
-                    if(!brandsData.brandName && !brandsData.brandStatus) {
-                        setBrandsData({brandName:response.data.brandName, brandStatus:response.data.brandStatus});
+    const EnterBrand = (e) => {
+        e.preventDefault();
+        let item = {brandName, brandStatus};
+        axios.post('/create/brand', item,
+            {
+                headers: {
+                    "Content-Type": "application/json",
+                    Authorization: `Bearer ${localStorage.usertoken}`
+                }
+            })
+            .then(function (response) {
+                setShowAlertText("Brand is successfully created")
+                setShowAlertTitle("Success")
+                setShowAlert(true)
+                setBrandsData({brandName: brandName})
+                if (brandStatus === brandStatus) {
+                    setBrandsData(brandStatus)
+                }
+
+            })
+            .catch((error) => {
+                if (error.response?.status === 401) {
+                    props.logout();
+                } else {
+                    setShowAlertText("Failed to create Brand.")
+                    setShowAlertTitle("Error")
+                    setShowAlert(true)
+                }
+            })
+    }
+    const BrandsData = (e) => {
+        const {value} = e.target
+        setBrandsData({...brandsData, brandName : value})
+    }
+    const BrandData = (e) => {
+        const {value} = e.target
+        setBrandsData({...brandsData, brandStatus : value})
+    }
+
+
+    const brandUpdate = (e) => {
+        e.preventDefault()
+        if(brandsData.brandName && brandsData.brandStatus){
+            axios.patch(`/brand/update/${id}`, brandsData,
+                {
+                    headers: {
+                        "Content-Type": "application/json"
                     }
                 })
-                .catch(function (error) {
-                    console.log(error);
+                .then(function (response) {
+                    setBrandsData(response.data)
                 })
-        })
+                .catch((error) => {
+                    console.log(error)
+                })
+            history.push("/brands")
+        }else{
+            console.log("field is empty")
+        }
 
-
-    const EnterBrand = (e) =>{
-        e.preventDefault();
-        let item = { brandName , brandStatus   };
-    axios.post('/create/brand', item,
-        { headers : {"Content-Type" : "application/json",
-            Authorization : `Bearer ${localStorage.usertoken}`
-        }})
-        .then(function (response) {
-            setShowAlertText("Brand is successfully created")
-            setShowAlertTitle("Success")
-            setShowAlert(true)
-            setBrandName("")
-            if( brandStatus===brandStatus){
-                setBrandStatus(brandStatus)
-            }
-
-        })
-        .catch( (error) => {
-            if(error.response?.status == 401){
-                props.logout();
-            }else {
-                setShowAlertText("Failed to create Brand.")
-                setShowAlertTitle("Error")
-                setShowAlert(true)
-            }
-        })
     }
-
-    const BrandsData = (event) =>{
-        console.log(event.target.value)
-        setBrandsData(event.target.value)
-    }
-
-
-
-
     return (
         <>
             <SweetAlert
@@ -111,12 +122,7 @@ function CreateEditBrand(props) {
                                 <Form.Control type="text" value={brandsData.brandName} onChange={BrandsData} placeholder="" />
 
                             </Form.Group>
-
-
-
-
-
-                            <Form.Group as={Col}   value={brandStatus} onChange={(e)=>setBrandStatus(e.target.value)}controlId="formGridState">
+                            <Form.Group as={Col}   value={brandsData.brandStatus} onChange={BrandData}controlId="formGridState">
                                 <Form.Label>Status</Form.Label>
                                 <Form.Select  defaultValue="Choose...">
                                     <option>Action</option>
@@ -127,7 +133,7 @@ function CreateEditBrand(props) {
 
                             <Row className="justify-content-md-center">
                                 <Col>
-                                    <Button variant="primary" type="submit" className="btn btn-primary mt-3 m-auto w-100" >
+                                    <Button variant="primary" type="submit"  onClick={brandUpdate} className="btn btn-primary mt-3 m-auto w-100" >
                                         Submit
                                     </Button>
                                 </Col>
