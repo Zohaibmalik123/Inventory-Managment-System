@@ -23,24 +23,28 @@ router.get('/get-category'  , async (req , res)=>{
         res.status(500).send(e)
     }
 })
-// router.patch('/update/category' , auth , async (req , res)=>{
-//     const updates = Object.keys(req.body)
-//     const allowedUpdates=['Id' , 'Brand_name']
-//     const isValidOperations= updates.every((updates)=> allowedUpdates.includes(updates))
+router.get('/get-category/:id'  , async (req , res)=>{
+    const _id = req.params.id
 
-//     if (!isValidOperations){
-//         res.status(400).send({Error : 'invalid updates'})
-//     }
+    try{
+        const category = await Category.findById(_id)
+        res.send(category)
+    } catch (e) {
+        res.status(500).send(e)
+    }
+})
 
-//     try{
-//         // const user = await User.findByIdAndUpdate(_id )
-//         updates.forEach((update)=> req.category[update] = req.body[update])
-//         await req.category.save()
-//         res.send(req.category)
-//     } catch(e){
-//         res.status(400).send(e)
-//     }
-// })
+router.patch('/category/update/:id'  ,async (req , res)=>{
+    try{
+        const _id = req.params.id;
+        // console.log(req.body);
+        // console.log(_id)
+        const updateCategory = await Category.findByIdAndUpdate( _id , req.body)
+        res.send(updateCategory)
+    } catch(e){
+        res.status(400).send(e)
+    }
+})
 
 // router.delete('/delete/category' ,auth , async (req , res)=>{
 //     try{

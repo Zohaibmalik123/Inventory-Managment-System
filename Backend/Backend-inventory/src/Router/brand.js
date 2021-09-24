@@ -6,7 +6,7 @@ const assert = require('assert')
 
 
 
-router.post('/create/brand' ,auth , async (req , res)=>{
+router.post('/create/brand' , auth  , async (req , res)=>{
     const brand = new  Brand(req.body)
     try{
         await brand.save()
@@ -36,36 +36,36 @@ router.get('/get-brand/:id'  , async (req , res)=>{
     }
 })
 
-router.patch('/brand/update/' , auth  , async (req , res)=>{
-    const updates = Object.keys(req.body)
-    const allowedUpdates=['brandName' , 'brandStatus']
-    const isValidOperations= updates.every((update)=> allowedUpdates.includes(update))
-
-    if (!isValidOperations){
-        res.status(400).send({Error : 'invalid updates'})
-    }
-
+router.patch('/brand/update/:id'  ,async (req , res)=>{
     try{
-        // const user = await User.findByIdAndUpdate(_id )
-        updates.forEach((update)=> req.brand[update] = req.body[update])
-        await req.brand.save()
-        res.send(req.brand)
+         const _id = req.params.id;
+         // console.log(req.body);
+         // console.log(_id)
+        const updateBrand = await Brand.findByIdAndUpdate( _id , req.body)
+        res.send(updateBrand)
     } catch(e){
         res.status(400).send(e)
     }
 })
 
-// router.delete('/delete/brand' , async (req , res)=>{
-//     try{
+router.delete('/delete/brand/:id' , async (req , res)=> {
+    const _id = req.params.id
+
+    try {
+        const brand = await Brand.findByIdAndDelete(_id)
+        if (!brand) {
+            res.status(404).send()
+        }
+        res.send(brand)
 //         await req.brand.remove()
 //         // console.log(req.brand)
 //         res.send(req.brand)
-//     } catch(e){
-//         res.status(500).send(e)
-//     }
+    } catch (e) {
+        res.status(500).send(e)
+    }
 // })
 
 
-
+})
 
 module.exports= router
