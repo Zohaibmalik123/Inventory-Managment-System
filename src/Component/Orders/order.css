@@ -1,0 +1,11 @@
+.body{
+    background-color: rgba(201, 201, 201, 0.74);
+    font-weight: 500;
+    /* font-family: Arial, Helvetica, sans-serif; */
+}
+.btn{
+    font-weight: 500;
+}
+.breadcrumb{
+    text-decoration: none;
+}
