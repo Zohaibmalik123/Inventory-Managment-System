@@ -61,7 +61,7 @@ function ProductsCreateEdit(props) {
                 }
             })
                 .then(function (response) {
-                    console.log(response.data)
+                    // console.log(response.data)
                     if (!productData.productName && !productData.quantity && !productData.rate && !productData.productStatus && !productData.brandId) {
                         setProductData({productName: response.data.productName, quantity: response.data.quantity, rate: response.data.rate
                             , productStatus: response.data.productStatus , brandId: response.data.brand?._id , categoryId: response.data.category?._id});

@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react'
 import { Table ,Container, Breadcrumb, Col } from "react-bootstrap"
 import {Link, useParams} from 'react-router-dom'
- import "./category.css";
+import "./category.css";
 import axios from "axios";
 import SweetAlert from "sweetalert-react";
 
@@ -39,7 +39,7 @@ function CategoryListing(props) {
                     console.log(error);
                 })
         }
-             getCategoriesWithParentId(id)
+        getCategoriesWithParentId(id)
     },[id])
 
     const getCategoriesWithParentId =(id)=>{
@@ -54,9 +54,9 @@ function CategoryListing(props) {
             }
         })
             .then(function (response) {
-                    console.log("response", response)
-                    setCategory(response.data);
-                    console.log("jhdsyfdsbdv")
+                console.log("response", response)
+                setCategory(response.data);
+                console.log("jhdsyfdsbdv")
                 if (!id) {
                     console.log("Response", response.data)
                     console.log("jdghfsdvsbdsf")
@@ -93,16 +93,16 @@ function CategoryListing(props) {
 
     const DeleteCategory=()=>{
         axios.delete(`/delete/category/${deleteId}`, {
-                method:"DELETE",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.usertoken}`
-                }
+            method:"DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.usertoken}`
+            }
+        })
+            .then(function (response) {
+                getCategoriesWithParentId();
+                hideConfirmModal();
             })
-                .then(function (response) {
-                    getCategoriesWithParentId();
-                    hideConfirmModal();
-                })
             .catch((error) => {
                 if (error.response?.status === 401) {
                     props.logout();
@@ -114,7 +114,7 @@ function CategoryListing(props) {
                     setShowAlertTitle("Error");
                     setShowAlertText("Product with this brand exists.");
                 }
-                })
+            })
     }
 
 
@@ -130,12 +130,12 @@ function CategoryListing(props) {
 
                 <Table striped bordered hover>
                     <thead>
-                        <tr>
-                            <th>Id</th>
-                            <th>Category Name</th>
-                            <th>Category Status</th>
-                            <th>Options</th>
-                        </tr>
+                    <tr>
+                        <th>Id</th>
+                        <th>Category Name</th>
+                        <th>Category Status</th>
+                        <th>Options</th>
+                    </tr>
                     </thead>
                     <tbody>
 
@@ -145,16 +145,26 @@ function CategoryListing(props) {
                             <tr>
                                 <td>{index + 1}</td>
                                 <td>
-                                  <Link className="btn Edit mb-2" to={`/category/${row._id}`}>{row.categoryName}</Link>
+                                    {row.countSubCategories > 0 ? (
+                                        <Link className="btn Edit mb-2" to={`/category/${row._id}`}>{row.categoryName} ({row.countSubCategories})</Link>
+                                    ) : (
+                                        row.categoryName
+                                    )}
                                 </td>
                                 <td>{row.categoryStatus}</td>
                                 <td>
                                     <Link className="btn Edit mb-2" to={`/category/edit/${row._id}`}>Edit</Link>
-                                    <a className="btn Edit mb-2" onClick={()=>showConfirmModal(row._id)} > delete </a>
+                                    {/*<a className="btn Edit mb-2" onClick={()=>showConfirmModal(row._id)} >delete</a>*/}
+
+                                    {!(row.countSubCategories > 0) &&
+                                        <a className="btn Edit mb-2" onClick={()=>showConfirmModal(row._id)} >delete</a>
+                                    }
+
                                 </td>
                             </tr>
                         );
                     })}
+
                     </tbody>
                 </Table>
                 <SweetAlert

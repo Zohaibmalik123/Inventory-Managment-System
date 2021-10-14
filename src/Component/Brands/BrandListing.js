@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import {Table, Container, Breadcrumb, Col,Alert} from "react-bootstrap"
-import {Link} from 'react-router-dom'
+import {Link, useParams} from 'react-router-dom'
 import "./Brand.css";
 import axios from "axios";
 import SweetAlert from "sweetalert-react";
@@ -19,9 +19,10 @@ function BrandListing(props) {
     useEffect(() => {
         GetBrands()
     }, [])
+   const {id} =useParams()
 
-    const GetBrands=()=>{
-        axios.get('/get-brands',{
+    const GetBrands=(id)=>{
+        axios.get('/get-brands' ,{
             headers: {
                 "Content-Type": "application/json",
                 Authorization: `Bearer ${localStorage.usertoken}`
@@ -29,7 +30,7 @@ function BrandListing(props) {
         })
             .then(function (response) {
                 setBrands(response.data);
-                // console.log(response.data)
+                console.log(response.data)
             })
             .catch(function (error) {
                 console.log(error);
@@ -67,7 +68,9 @@ function BrandListing(props) {
                         console.log(response.data)
                         GetBrands();
                         hideConfirmModal();
-
+                        setShowAlertText("Brand is successfully deleted")
+                        setShowAlertTitle("Success")
+                        setShowAlert(true)
                     })
                     .catch((error) => {
                         if (error.response?.status === 401) {
@@ -79,6 +82,10 @@ function BrandListing(props) {
                             setShowCancelButton(false);
                             setShowAlertTitle("Error");
                             setShowAlertText("Product with this brand exists.");
+                        }else {
+                            setShowAlertText("Failed to delete Brand.")
+                            setShowAlertTitle("Error")
+                            setShowAlert(true)
                         }
                     })
     }
@@ -100,6 +107,7 @@ function BrandListing(props) {
                         <tr>
                             <th>Id</th>
                             <th>Brand_Name</th>
+                            <th>Categories</th>
                             <th>Brand_Status</th>
                             <th>Options</th>
                         </tr>
@@ -107,10 +115,12 @@ function BrandListing(props) {
                     <tbody>
 
                      { brands.map((row, index) => {
+                         console.log(row.category)
                             return(
                                 <tr>
                                 <td>{index + 1}</td>
                                 <td>{row.brandName}</td>
+                                <td>{row.category[0]?.categoryName}</td>
                                 <td>{row.brandStatus}</td>
                                 <td>
                                     <Link className="btn Edit mb-2" to={`/brands/edit/${row._id}`} > Edit </Link>

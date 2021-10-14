@@ -34,12 +34,14 @@ function CategoryEdit(props) {
                 .then(function (response) {
                     console.log(response.data)
                     if (!categoriesData.categoryName && !categoriesData.categoryStatus) {
-                        console.log("Response", response.data)
+                        // console.log("Response", response.data)
 
                         console.log("Name:", response.data.categoryName)
                         setCategoriesData({
                             categoryName: response.data.categoryName,
-                            categoryStatus: response.data.categoryStatus
+                            categoryStatus: response.data.categoryStatus,
+                            mainCategoryId: response.data.mainCategoryId,
+                            subCategoryId: response.data.subCategoryId
                         });
                     }
                 })
@@ -58,7 +60,7 @@ function CategoryEdit(props) {
                 Authorization: `Bearer ${localStorage.usertoken}`
             }
         }).then(function (response) {
-            console.log(response.data)
+            // console.log(response.data)
             setCategories(response.data);
         })
             .catch(function (error) {

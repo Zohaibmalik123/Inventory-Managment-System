@@ -1,6 +1,5 @@
 import Button from '@restart/ui/esm/Button'
 import React, {useEffect, useState} from 'react'
-import {useHistory} from "react-router-dom";
 import axios from 'axios';
 import {Form, Container, Col, Row, Breadcrumb} from "react-bootstrap"
 import SweetAlert from 'sweetalert-react';
@@ -10,13 +9,13 @@ import {useParams} from "react-router-dom";
 axios.defaults.baseURL = 'http://localhost:8000'
 
 function CreateEditBrand(props) {
-    const history = useHistory()
     const [brandsData, setBrandsData] = useState({
         brandName: null,
         brandStatus: null,
+        categoryId:null
     });
     const [brandName] = useState("")
-    const [brandStatus] = useState("")
+    const [category , setCategory] = useState([])
     const [showAlert, setShowAlert] = useState(false)
     const [showAlertTitle, setShowAlertTitle] = useState("")
     const [showAlertText, setShowAlertText] = useState("")
@@ -31,14 +30,28 @@ function CreateEditBrand(props) {
                 }
             })
                 .then(function (response) {
-                    console.log(response.data)
-                    if (!brandsData.brandName && !brandsData.brandStatus) {
-                        setBrandsData({brandName: response.data.brandName, brandStatus: response.data.brandStatus});
+                    // console.log(response.categoryName)
+                    if (!brandsData.brandName && !brandsData.brandStatus && !brandsData.categoryId) {
+                        setBrandsData({brandName: response.data.brandName, brandStatus: response.data.brandStatus , categoryId: response.data.category[0]?._id});
+                        // console.log(response.data)
                     }
                 })
                 .catch(function (error) {
                     console.log(error);
                 })
+        axios.get('/get-all-category' , {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.usertoken}`
+            }
+        })
+            .then(function (response){
+                setCategory(response.data)
+            })
+            .catch(function (error){
+                console.log(error)
+            })
+
     }, [])
 
     const SubmitBrand = (e) => {
@@ -51,7 +64,7 @@ function CreateEditBrand(props) {
     }
 
     const EnterBrand = () => {
-        if (brandsData.brandName && brandsData.brandStatus) {
+        if (brandsData.brandName && brandsData.brandStatus && brandsData.categoryId) {
             axios.post('/create/brand', brandsData,
                 {
                     headers: {
@@ -83,10 +96,15 @@ function CreateEditBrand(props) {
         const {value} = e.target
         setBrandsData({...brandsData, brandStatus: value})
     }
+    const Category= (e)=>{
+        const {value} = e.target
+        setBrandsData({...brandsData , categoryId: value})
+    }
+
 
 
     const brandUpdate = () => {
-        if (brandsData.brandName && brandsData.brandStatus) {
+        if (brandsData.brandName && brandsData.brandStatus && brandsData.categoryId) {
             axios.patch(`/brand/update/${id}`, brandsData,
                 {
                     headers: {
@@ -96,11 +114,19 @@ function CreateEditBrand(props) {
                 })
                 .then(function (response) {
                     setBrandsData(response.data)
+                    setShowAlertText("Brand is successfully updated")
+                    setShowAlertTitle("Success")
+                    setShowAlert(true)
                 })
                 .catch((error) => {
-                    console.log(error)
+                    if (error.response?.status === 401) {
+                        props.logout();
+                    } else {
+                        setShowAlertText("Failed to update Brand.")
+                        setShowAlertTitle("Error")
+                        setShowAlert(true)
+                    }
                 })
-            history.push("/brands")
         } else {
             console.log("field is empty")
         }
@@ -131,6 +157,38 @@ function CreateEditBrand(props) {
                                               placeholder=""/>
 
                             </Form.Group>
+
+
+                            <Form.Group className="mb-3" controlId="formGridAddress1">
+                            <Form.Label>Categories</Form.Label>
+                            <Form.Select value={brandsData.categoryId} onChange={Category} defaultValue="Choose...">
+                                <option value="">Select Category</option>
+                                {category.map((row) => {
+                                    // console.log(row._id)
+                                    return (
+                                        <>
+                                        <option value={row._id}>{row.categoryName}</option>
+                                        {row.subCategories.map((row) => {
+                                            // console.log(row._id)
+                                            return (
+                                                <>
+                                                    <option value={row._id}>&nbsp;&nbsp;&nbsp;&nbsp;{row.categoryName}</option>
+                                                    {row.subCategories.map((row) => {
+                                                        // console.log(row._id)
+                                                        return (
+                                                            <option value={row._id}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{row.categoryName}</option>
+
+                                                        );
+                                                    })}
+                                                </>
+                                            );
+                                        })}
+                                        </>
+                                    );
+                                })}
+                            </Form.Select>
+                            </Form.Group>
+
                             <Form.Group as={Col} controlId="formGridState">
                                 <Form.Label>Status</Form.Label>
                                 <Form.Select defaultValue="Choose..." value={brandsData.brandStatus}
