@@ -106,6 +106,7 @@ function BrandListing(props) {
                     <thead>
                         <tr>
                             <th>Id</th>
+                            <th>Image</th>
                             <th>Brand_Name</th>
                             <th>Categories</th>
                             <th>Brand_Status</th>
@@ -118,14 +119,15 @@ function BrandListing(props) {
                          console.log(row.category)
                             return(
                                 <tr>
-                                <td>{index + 1}</td>
-                                <td>{row.brandName}</td>
-                                <td>{row.category[0]?.categoryName}</td>
-                                <td>{row.brandStatus}</td>
-                                <td>
+                                    <td>{index + 1}</td>
+                                    <td>{row.brandImage && <img src={`http://localhost:8000/images/${row.brandImage}`} height="30" width="30"/>}</td>
+                                    <td>{row.brandName}</td>
+                                    <td>{row.category[0]?.categoryName}</td>
+                                    <td>{row.brandStatus}</td>
+                                    <td>
                                     <Link className="btn Edit mb-2" to={`/brands/edit/${row._id}`} > Edit </Link>
                                     <a className="btn Edit mb-2" onClick={()=>showConfirmModal(row._id) } > Delete </a>
-                                </td>
+                                    </td>
                             </tr>
                             );
                      })}

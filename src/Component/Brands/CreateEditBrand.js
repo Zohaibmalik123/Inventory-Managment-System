@@ -12,6 +12,7 @@ function CreateEditBrand(props) {
     const [brandsData, setBrandsData] = useState({
         brandName: null,
         brandStatus: null,
+        brandImage: null,
         categoryId:null
     });
     const [brandName] = useState("")
@@ -32,8 +33,8 @@ function CreateEditBrand(props) {
                 .then(function (response) {
                     // console.log(response.categoryName)
                     if (!brandsData.brandName && !brandsData.brandStatus && !brandsData.categoryId) {
-                        setBrandsData({brandName: response.data.brandName, brandStatus: response.data.brandStatus , categoryId: response.data.category[0]?._id});
-                        // console.log(response.data)
+                        setBrandsData({brandName: response.data.brandName, brandStatus: response.data.brandStatus , categoryId: response.data.category[0]?._id  , brandImage:response.data[0]?.brandImage});
+                        console.log(response.data)
                     }
                 })
                 .catch(function (error) {
@@ -52,6 +53,7 @@ function CreateEditBrand(props) {
                 console.log(error)
             })
 
+
     }, [])
 
     const SubmitBrand = (e) => {
@@ -64,6 +66,7 @@ function CreateEditBrand(props) {
     }
 
     const EnterBrand = () => {
+        console.log(brandsData)
         if (brandsData.brandName && brandsData.brandStatus && brandsData.categoryId) {
             axios.post('/create/brand', brandsData,
                 {
@@ -96,6 +99,15 @@ function CreateEditBrand(props) {
         const {value} = e.target
         setBrandsData({...brandsData, brandStatus: value})
     }
+    const BrandImage = (e) => {
+        var file = e.target.files[0];
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+
+        reader.onloadend = function (e) {
+            setBrandsData({...brandsData, brandImage: reader.result})
+        }.bind(this)
+    }
     const Category= (e)=>{
         const {value} = e.target
         setBrandsData({...brandsData , categoryId: value})
@@ -104,7 +116,7 @@ function CreateEditBrand(props) {
 
 
     const brandUpdate = () => {
-        if (brandsData.brandName && brandsData.brandStatus && brandsData.categoryId) {
+        if (brandsData.brandName && brandsData.brandStatus && brandsData.categoryId && brandsData.brandImage) {
             axios.patch(`/brand/update/${id}`, brandsData,
                 {
                     headers: {
@@ -164,17 +176,14 @@ function CreateEditBrand(props) {
                             <Form.Select value={brandsData.categoryId} onChange={Category} defaultValue="Choose...">
                                 <option value="">Select Category</option>
                                 {category.map((row) => {
-                                    // console.log(row._id)
                                     return (
                                         <>
                                         <option value={row._id}>{row.categoryName}</option>
                                         {row.subCategories.map((row) => {
-                                            // console.log(row._id)
                                             return (
                                                 <>
                                                     <option value={row._id}>&nbsp;&nbsp;&nbsp;&nbsp;{row.categoryName}</option>
                                                     {row.subCategories.map((row) => {
-                                                        // console.log(row._id)
                                                         return (
                                                             <option value={row._id}>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{row.categoryName}</option>
 
@@ -187,6 +196,11 @@ function CreateEditBrand(props) {
                                     );
                                 })}
                             </Form.Select>
+                            </Form.Group>
+
+                            <Form.Group controlId="formFile" className="mb-3">
+                                <Form.Label>Image upload</Form.Label>
+                                <Form.Control type="file" action="/upload" method="post" encType="multipart/form-data"  onChange={BrandImage}/>
                             </Form.Group>
 
                             <Form.Group as={Col} controlId="formGridState">
